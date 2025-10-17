@@ -1,0 +1,74 @@
+{
+  "Courses": [
+    {
+      "id": 1,
+      "subject": "Web Development Bootcamp",
+      "location": "Chiswick, W4",
+      "price": 120,
+      "spaces": 15
+    },
+    {
+      "id": 2,
+      "subject": "Full Stack JavaScript Workshop",
+      "location": "London Bridge, SE1",
+      "price": 150,
+      "spaces": 10
+    },
+    {
+      "id": 3,
+      "subject": "Python for Data Science",
+      "location": "Online",
+      "price": 99,
+      "spaces": 25
+    },
+    {
+      "id": 4,
+      "subject": "UI/UX Design Fundamentals",
+      "location": "Manchester",
+      "price": 120,
+      "spaces": 12
+    },
+    {
+      "id": 5,
+      "subject": "Cloud Computing with AWS",
+      "location": "Birmingham",
+      "price": 180,
+      "spaces": 8
+    },
+    {
+      "id": 6,
+      "subject": "Mobile App Development with Flutter",
+      "location": "Online",
+      "price": 110,
+      "spaces": 20
+    },
+    {
+      "id": 7,
+      "subject": "Cybersecurity Essentials",
+      "location": "Leeds",
+      "price": 130,
+      "spaces": 14
+    },
+    {
+      "id": 8,
+      "subject": "Artificial Intelligence & Machine Learning",
+      "location": "Cambridge",
+      "price": 200,
+      "spaces": 6
+    },
+    {
+      "id": 9,
+      "subject": "React & Vue Masterclass",
+      "location": "London, Shoreditch",
+      "price": 160,
+      "spaces": 9
+    },
+    {
+      "id": 10,
+      "subject": "Database Management with SQL",
+      "location": "Online",
+      "price": 95,
+      "spaces": 18
+    }
+  ]
+}

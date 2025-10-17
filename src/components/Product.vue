@@ -1,0 +1,35 @@
+<script setup>
+import { defineProps } from 'vue'
+
+defineProps({
+  item: Object,
+})
+</script>
+<template>
+  <div
+    class="subject-card bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1 relative"
+  >
+    <div class="h-40 bg-gradient-to-r from-blue-100 to-indigo-100 flex items-center justify-center">
+      <i class="fas fa-square-root-alt text-4xl text-blue-600 opacity-70"></i>
+    </div>
+    <div class="p-4">
+      <h3 class="font-bold text-xl mb-2 text-gray-800">{{ item.subject }}</h3>
+
+      <!-- Removed: rating and quantity UI -->
+      <p class="text-gray-600 text-base mb-1"><b>Location:</b> {{ item.location }}</p>
+      <p class="text-gray-600 text-base mb-4">
+        <b>Price:</b>£<span class="product-price">{{ item.price }}</span>
+      </p>
+      <p class="text-gray-600 text-base mb-4">
+        <b>Spaces:</b> <span class="product-stock">{{ item.space }}</span>
+      </p>
+
+      <!-- Add to cart now adds a single unit -->
+      <button
+        class="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors duration-300 add-to-cart"
+      >
+        Add to cart <i class="fa-solid fa-cart-plus ml-2"></i>
+      </button>
+    </div>
+  </div>
+</template>
