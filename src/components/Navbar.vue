@@ -1,9 +1,11 @@
-<script setup></script>
+<script setup>
+import { RouterLink } from 'vue-router'
+</script>
 <template>
   <header class="bg-blue-600 text-white py-6 shadow-lg">
     <div class="container mx-auto px-4">
       <div class="flex flex-col md:flex-row justify-between items-center">
-        <h1 class="text-3xl font-bold mb-4 md:mb-0">Project</h1>
+        <RouterLink to="/"><h1 class="text-3xl font-bold mb-4 md:mb-0">Project</h1></RouterLink>
         <div class="flex items-center space-x-4 w-full md:w-auto">
           <div class="relative w-full md:w-64">
             <!-- Changed id to avoid duplicate with filter search -->
@@ -20,13 +22,29 @@
 
           <!-- Added: Cart button -->
           <div class="relative">
-            <button
+            <RouterLink
+              to="/cart"
               id="cart-button"
-              class="bg-white text-blue-600 px-3 py-2 rounded-full flex items-center space-x-2"
+              class="bg-white text-blue-600 px-3 py-2 rounded-full flex items-center space-x-2 shadow-sm hover:bg-gray-100 transition"
             >
-              <i class="fas fa-shopping-cart"></i>
+              <!-- Inline SVG cart (no external icon dependency) -->
+              <svg
+                class="w-5 h-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M6 6h15l-1.5 8.5a2 2 0 0 1-2 1.5H9.5a2 2 0 0 1-2-1.5L6 6z" />
+                <circle cx="10" cy="20" r="1" />
+                <circle cx="18" cy="20" r="1" />
+              </svg>
+
               <span class="hidden md:inline">Cart</span>
-            </button>
+            </RouterLink>
             <span id="cart-count" class="cart-badge" style="display: none">0</span>
           </div>
         </div>

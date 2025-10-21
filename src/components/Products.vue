@@ -4,7 +4,6 @@ import ProductData from '@/info.json'
 import Product from './Product.vue'
 
 let items = ref(ProductData.Courses)
-console.log(items.value)
 </script>
 <template>
   <div
