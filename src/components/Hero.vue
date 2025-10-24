@@ -18,7 +18,7 @@ const sortOrder = ref('asc') // asc | desc
 const sortedCourses = computed(() => {
   const order = sortOrder.value === 'asc' ? 1 : -1
   const key = sortKey.value
-  // clone array to avoid mutating original
+  // clone array to avoid mutating original ordering
   return [...props.courses].sort((a, b) => {
     const va = a[key]
     const vb = b[key]
@@ -87,7 +87,7 @@ const sortedCourses = computed(() => {
           </div>
 
           <div class="mt-2">
-            <!-- button always visible; disabled when no spaces; uses v-on to call provided handler -->
+            <!-- button always visible; disabled when no spaces; uses provided handler -->
             <button
               class="w-full px-3 py-2 bg-blue-600 text-white rounded disabled:opacity-50 disabled:cursor-not-allowed"
               :disabled="!(course.spaces > 0)"

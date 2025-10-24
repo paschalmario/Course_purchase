@@ -1,64 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
-
-const STORAGE_KEY = 'app_cart_v1'
-const cart = ref([])
-
-function loadCart() {
-  const raw = localStorage.getItem(STORAGE_KEY)
-  cart.value = raw ? JSON.parse(raw) : []
-}
-
-function saveCart() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(cart.value))
-}
-
-function increment(item) {
-  if (item.quantity < (item.spaces || Infinity)) {
-    item.quantity++
-    saveCart()
-    window.dispatchEvent(new CustomEvent('cart-updated', { detail: cart.value }))
-  }
-}
-
-function decrement(item) {
-  if (item.quantity > 1) {
-    item.quantity--
-    saveCart()
-    window.dispatchEvent(new CustomEvent('cart-updated', { detail: cart.value }))
-  } else {
-    removeItem(item)
-  }
-}
-
-function removeItem(item) {
-  cart.value = cart.value.filter((i) => i.id !== item.id)
-  saveCart()
-  window.dispatchEvent(new CustomEvent('cart-updated', { detail: cart.value }))
-}
-
-function clearCart() {
-  cart.value = []
-  saveCart()
-  window.dispatchEvent(new CustomEvent('cart-updated', { detail: cart.value }))
-}
-
-const total = computed(() => cart.value.reduce((s, i) => s + i.price * (i.quantity || 0), 0))
-
-let handler = null
-onMounted(() => {
-  loadCart()
-  handler = (e) => {
-    if (e && e.detail) cart.value = e.detail
-  }
-  window.addEventListener('cart-updated', handler)
-  window.addEventListener('storage', loadCart)
-})
-
-onBeforeUnmount(() => {
-  if (handler) window.removeEventListener('cart-updated', handler)
-  window.removeEventListener('storage', loadCart)
-})
+import { ref, computed } from 'vue'
 
 const props = defineProps({
   cart: {
@@ -81,20 +22,22 @@ const props = defineProps({
 
 const name = ref('')
 const phone = ref('')
+const confirmation = ref('')
 
 // validation: Name letters only, Phone numbers only
 const nameValid = computed(() => /^[A-Za-z\s]{2,}$/.test(name.value.trim()))
 const phoneValid = computed(() => /^\d{7,15}$/.test(phone.value.trim()))
 const canCheckout = computed(() => nameValid.value && phoneValid.value && props.cart.length > 0)
+const total = computed(() => props.cart.reduce((s, i) => s + i.price * (i.quantity || 0), 0))
 
 function handleCheckout() {
   if (!canCheckout.value) return
+  // notify parent to process/clear the cart
   props.onCheckout(name.value.trim(), phone.value.trim())
-  // clear form
+  // show confirmation and clear inputs
+  confirmation.value = `Thank you, ${name.value.trim()}! Your order totaling £${total.value.toFixed(2)} has been submitted.`
   name.value = ''
   phone.value = ''
-  // navigate back to lessons (parent handles view)
-  props.onBack()
 }
 </script>
 
@@ -134,6 +77,13 @@ function handleCheckout() {
     <!-- Checkout form -->
     <aside class="bg-white p-4 rounded-lg shadow">
       <h3 class="text-lg font-medium mb-3">Checkout</h3>
+
+      <div
+        v-if="confirmation"
+        class="mb-4 p-3 rounded bg-green-50 border border-green-100 text-green-800"
+      >
+        {{ confirmation }}
+      </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
