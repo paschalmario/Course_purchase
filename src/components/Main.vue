@@ -1,17 +1,40 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import Hero from './Hero.vue'
-import Products from './Products.vue'
 import CartPage from './CartPage.vue'
-import info from '@/info.json'
 
 // initialize reactive courses (clone so we can mutate spaces)
-const courses = ref((info?.Courses || []).map((c) => ({ ...c })))
+const courses = ref([]) // initially empty, will fetch from API
 
 // shopping cart: { id, subject, location, price, image, quantity }
 const cart = ref([])
 
-const showCart = ref(false)
+// simple history-based routing
+const currentPath = ref(window.location.pathname || '/')
+
+function navigateTo(path) {
+  if (path === currentPath.value) return
+  history.pushState({}, '', path)
+  currentPath.value = path
+  // optionally focus or scroll to top
+  window.scrollTo(0, 0)
+}
+
+// cleanup / handle back/forward
+function onPopState() {
+  currentPath.value = window.location.pathname || '/'
+}
+
+onMounted(() => {
+  window.addEventListener('popstate', onPopState)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('popstate', onPopState)
+})
+
+// derived view flag
+const showCart = computed(() => currentPath.value === '/cart')
 
 const cartCount = computed(() => cart.value.reduce((s, i) => s + (i.quantity || 0), 0))
 const cartHasItems = computed(() => cart.value.length > 0)
@@ -72,7 +95,7 @@ function clearCart() {
     if (course) course.spaces = (course.spaces || 0) + (item.quantity || 0)
   }
   cart.value = []
-  showCart.value = false
+  navigateTo('/')
 
   emitCartUpdated()
 }
@@ -83,32 +106,21 @@ function placeOrder(name, phone) {
   clearCart()
 }
 
-// DOM click delegation to support your existing nav button without changing it.
-// The nav button can be any of these: id="nav-cart", class="nav-cart", or have attribute data-cart-toggle
-function domClickHandler(ev) {
-  const el =
-    ev.target instanceof Element
-      ? ev.target.closest('#nav-cart, .nav-cart, [data-cart-toggle]')
-      : null
-  if (el) {
-    // toggle view regardless of cart state (you can change to require items)
-    showCart.value = !showCart.value
-  }
-}
-
-// listen for external "nav-cart-toggle" custom events (optional)
-function handleNavCartToggle() {
-  showCart.value = !showCart.value
-}
-
+// fetch courses from API using fetch() promise
 onMounted(() => {
-  document.addEventListener('click', domClickHandler)
-  window.addEventListener('nav-cart-toggle', handleNavCartToggle)
-})
-
-onBeforeUnmount(() => {
-  document.removeEventListener('click', domClickHandler)
-  window.removeEventListener('nav-cart-toggle', handleNavCartToggle)
+  fetch('http://localhost:3000/api/courses')
+    .then((res) => {
+      if (!res.ok) throw new Error('Failed to fetch courses')
+      return res.json()
+    })
+    .then((data) => {
+      // ensure local reactive copies so spaces can be mutated
+      courses.value = Array.isArray(data) ? data.map((d) => ({ ...d })) : []
+    })
+    .catch((err) => {
+      console.error('Error loading courses:', err)
+      // fallback: you can keep a local copy in src/info.json if needed
+    })
 })
 </script>
 
@@ -118,13 +130,13 @@ onBeforeUnmount(() => {
       <div class="container mx-auto px-4 py-4 flex items-center justify-between">
         <h1 class="text-xl font-semibold text-gray-800">Course Shop</h1>
 
-        <!-- Added visible cart button that uses the existing reactive state -->
+        <!-- visible cart button navigates to /cart -->
         <nav class="flex items-center gap-3">
           <button
             id="nav-cart"
             class="relative px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             :disabled="!cartHasItems"
-            @click="showCart = !showCart"
+            @click="navigateTo('/cart')"
             :aria-pressed="showCart"
           >
             <!-- simple cart icon -->
@@ -166,15 +178,13 @@ onBeforeUnmount(() => {
       <div v-if="!showCart">
         <!-- show only the lessons list once -->
         <Hero :courses="courses" :onAddToCart="addToCart" />
-        <!-- keep Products component if it displays something different; remove it if it duplicates lessons -->
-        <Products />
       </div>
 
       <div v-else>
         <CartPage
           :cart="cart"
           :onRemove="removeFromCart"
-          :onBack="() => (showCart.value = false)"
+          :onBack="() => navigateTo('/')"
           :onCheckout="placeOrder"
         />
       </div>
