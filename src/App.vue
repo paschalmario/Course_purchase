@@ -1,10 +1,14 @@
 <script setup>
-import Navbar from '@/components/Navbar.vue'
-import Homeview from './view/Homeview.vue'
-import { RouterView } from 'vue-router'
+import Main from './components/Main.vue'
 </script>
 
 <template>
-  <Navbar />
-  <RouterView />
+  <div class="min-h-screen bg-gray-50">
+    <Main />
+  </div>
 </template>
+
+<style>
+/* ...existing code... */
+/* keep global styles minimal here; main.css already imported in main.js */
+</style>

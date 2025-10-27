@@ -12,8 +12,17 @@ const props = defineProps({
   },
 })
 
+const emit = defineEmits(['search'])
+
 const sortKey = ref('subject') // subject | location | price | spaces
 const sortOrder = ref('asc') // asc | desc
+const searchTerm = ref('')
+
+function onSearchInput(e) {
+  const v = e.target.value
+  searchTerm.value = v
+  emit('search', v)
+}
 
 const sortedCourses = computed(() => {
   const order = sortOrder.value === 'asc' ? 1 : -1
@@ -35,12 +44,23 @@ const sortedCourses = computed(() => {
     <div class="text-center mb-6">
       <h2 class="text-2xl font-semibold text-gray-800 mb-2">Explore Subjects</h2>
       <p class="text-gray-600 max-w-2xl mx-auto">
-        Browse our lessons. Use the controls below to sort by subject, location, price or spaces.
+        Browse our lessons. Use the controls below to sort or search.
       </p>
     </div>
 
-    <!-- Sorting controls -->
+    <!-- Search + Sorting controls -->
     <div class="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div class="flex items-center gap-3 w-full sm:w-auto">
+        <label class="sr-only">Search</label>
+        <input
+          type="search"
+          :value="searchTerm"
+          @input="onSearchInput"
+          placeholder="Search lessons (subject, location, price, spaces)..."
+          class="px-3 py-2 border rounded w-full sm:w-96"
+        />
+      </div>
+
       <div class="flex items-center gap-3">
         <label class="text-sm text-gray-600">Sort by</label>
         <select v-model="sortKey" class="px-3 py-2 border rounded bg-white">
@@ -54,14 +74,6 @@ const sortedCourses = computed(() => {
           <option value="asc">Ascending</option>
           <option value="desc">Descending</option>
         </select>
-      </div>
-
-      <div class="text-sm text-gray-500">
-        Showing <span class="font-medium">{{ sortedCourses.length }}</span> lessons — sorted by
-        <span class="font-medium">{{ sortKey }}</span> (<span class="font-medium">{{
-          sortOrder
-        }}</span
-        >)
       </div>
     </div>
 

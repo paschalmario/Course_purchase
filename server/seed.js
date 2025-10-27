@@ -1,32 +1,45 @@
 import fs from 'fs'
 import path from 'path'
 import { connectDB } from './db.js'
+import { fileURLToPath } from 'url'
 import dotenv from 'dotenv'
 dotenv.config()
 
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+// candidate locations to find src/info.json
+const candidates = [
+  path.resolve(process.cwd(), 'src', 'info.json'), // when run from project root
+  path.resolve(process.cwd(), '..', 'src', 'info.json'), // when run from server/ with cwd = server
+  path.resolve(__dirname, '..', 'src', 'info.json'), // server/../src/info.json
+  path.resolve(__dirname, 'src', 'info.json'), // server/src/info.json (unlikely but safe)
+]
+
+let filePath = null
+for (const p of candidates) {
+  if (fs.existsSync(p)) {
+    filePath = p
+    break
+  }
+}
+
+if (!filePath) {
+  console.error('Seed file not found. Tried the following locations:')
+  for (const p of candidates) console.error(' -', p)
+  process.exit(1)
+}
+
 async function seed() {
-  const file = path.resolve(process.cwd(), 'src', 'info.json')
-  if (!fs.existsSync(file)) {
-    console.error('Seed file not found:', file)
-    process.exit(1)
-  }
-
-  const raw = fs.readFileSync(file, 'utf8')
-  let data
   try {
-    data = JSON.parse(raw)
-  } catch (e) {
-    console.error('Failed to parse info.json', e)
-    process.exit(1)
-  }
+    const raw = fs.readFileSync(filePath, 'utf8')
+    const data = JSON.parse(raw)
+    const docs = Array.isArray(data.Courses) ? data.Courses : []
+    if (!docs.length) {
+      console.error('No courses found in info.json at', filePath)
+      process.exit(1)
+    }
 
-  const docs = Array.isArray(data.Courses) ? data.Courses : []
-  if (!docs.length) {
-    console.error('No courses found in info.json')
-    process.exit(1)
-  }
-
-  try {
     const db = await connectDB()
     const col = db.collection('courses')
     await col.deleteMany({})

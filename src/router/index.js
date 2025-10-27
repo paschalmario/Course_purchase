@@ -1,27 +1,11 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import Homeview from '@/view/Homeview.vue'
-import CartView from '@/view/CartView.vue'
-import CheckoutView from '@/view/CheckoutView.vue'
+// Router removed — Vue Router is no longer used. Keep this file as a harmless stub
+// so existing imports won't crash. If you prefer, you can delete this file and
+// remove imports in src/main.js instead.
 
-const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: Homeview,
-    },
-    {
-      path: '/cart',
-      name: 'Cart',
-      component: CartView,
-    },
-    {
-      path: '/cart/checkout',
-      name: 'Checkout',
-      component: CheckoutView,
-    },
-  ],
-})
+const routes = [] // no routes
 
-export default router
+export default {
+  // legacy default export kept for compatibility (no-op)
+  install: () => {},
+  routes,
+}
