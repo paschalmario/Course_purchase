@@ -1,0 +1,84 @@
+{
+  "Courses": [
+    {
+      "id": 1,
+      "subject": "Web Development",
+      "location": "London",
+      "price": 150,
+      "spaces": 8,
+      "image": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "id": 2,
+      "subject": "Data Science",
+      "location": "Manchester",
+      "price": 180,
+      "spaces": 5,
+      "image": "https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "id": 3,
+      "subject": "Graphic Design",
+      "location": "Birmingham",
+      "price": 120,
+      "spaces": 10,
+      "image": "https://images.unsplash.com/photo-1503602642458-232111445657?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "id": 4,
+      "subject": "Cybersecurity",
+      "location": "Liverpool",
+      "price": 200,
+      "spaces": 6,
+      "image": "https://source.unsplash.com/800x533/?cybersecurity,security,network"
+    },
+    {
+      "id": 5,
+      "subject": "Digital Marketing",
+      "location": "Leeds",
+      "price": 140,
+      "spaces": 12,
+      "image": "https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "id": 6,
+      "subject": "Machine Learning",
+      "location": "Cambridge",
+      "price": 220,
+      "spaces": 5,
+      "image": "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "id": 7,
+      "subject": "Photography",
+      "location": "Brighton",
+      "price": 100,
+      "spaces": 9,
+      "image": "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "id": 8,
+      "subject": "Artificial Intelligence",
+      "location": "Oxford",
+      "price": 230,
+      "spaces": 5,
+      "image": "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "id": 9,
+      "subject": "Blockchain Technology",
+      "location": "Bristol",
+      "price": 250,
+      "spaces": 5,
+      "image": "https://source.unsplash.com/800x533/?blockchain,ledger,crypto"
+    },
+    {
+      "id": 10,
+      "subject": "Cloud Computing",
+      "location": "Nottingham",
+      "price": 190,
+      "spaces": 7,
+      "image": "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=800&q=80"
+    }
+  ]
+}
