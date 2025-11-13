@@ -125,9 +125,9 @@ VITE_API_URL="http://localhost:3000"
 
 ## 👤 Author
 
-- **Name**: [Your Name]
-- **Student ID**: [Your ID]
-- **Email**: [Your Middlesex University Email]
+- **Name**: Zikora P. Okafor
+- **Student ID**: M01092421
+- **Email**: ZO078@live.mdx.ac.uk
 
 ## 📅 Important Dates
 
