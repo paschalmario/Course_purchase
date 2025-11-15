@@ -6,16 +6,13 @@ const props = defineProps({
     type: Array,
     required: true,
   },
-  onAddToCart: {
-    type: Function,
-    required: true,
-  },
 })
 
-const emit = defineEmits(['search'])
+const emit = defineEmits(['search', 'add-to-cart'])
 
-const sortKey = ref('subject') // subject | location | price | spaces
-const sortOrder = ref('asc') // asc | desc
+// local state
+const sortKey = ref('subject') // subject|location|price|spaces
+const sortOrder = ref('asc') // asc|desc
 const searchTerm = ref('')
 
 function onSearchInput(e) {
@@ -24,11 +21,13 @@ function onSearchInput(e) {
   emit('search', v)
 }
 
+// computed sorted & filtered list (filters performed upstream if you want backend search)
+// here we just sort the passed-in courses (search handled by parent via fetch)
 const sortedCourses = computed(() => {
+  const arr = Array.isArray(props.courses) ? [...props.courses] : []
   const order = sortOrder.value === 'asc' ? 1 : -1
   const key = sortKey.value
-  // clone array to avoid mutating original ordering
-  return [...props.courses].sort((a, b) => {
+  return arr.sort((a, b) => {
     const va = a[key]
     const vb = b[key]
     if (typeof va === 'string' && typeof vb === 'string') {
@@ -37,6 +36,10 @@ const sortedCourses = computed(() => {
     return (Number(va) - Number(vb)) * order
   })
 })
+
+function onAdd(id) {
+  emit('add-to-cart', { id, quantity: 1 })
+}
 </script>
 
 <template>
@@ -103,7 +106,7 @@ const sortedCourses = computed(() => {
             <button
               class="w-full px-3 py-2 bg-blue-600 text-white rounded disabled:opacity-50 disabled:cursor-not-allowed"
               :disabled="!(course.spaces > 0)"
-              @click="props.onAddToCart(course.id)"
+              @click="onAdd(course.id)"
               aria-disabled="!(course.spaces > 0)"
             >
               Add to cart

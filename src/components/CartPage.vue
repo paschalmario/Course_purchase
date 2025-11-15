@@ -2,29 +2,16 @@
 import { ref, computed } from 'vue'
 
 const props = defineProps({
-  cart: {
-    type: Array,
-    required: true,
-  },
-  onRemove: {
-    type: Function,
-    required: true,
-  },
-  onBack: {
-    type: Function,
-    required: true,
-  },
-  onCheckout: {
-    type: Function,
-    required: true,
-  },
+  cart: { type: Array, required: true },
+  onRemove: { type: Function, required: true },
+  onBack: { type: Function, required: true },
+  onCheckout: { type: Function, required: true },
 })
 
 const name = ref('')
 const phone = ref('')
 const confirmation = ref('')
 
-// validation: Name letters only, Phone numbers only
 const nameValid = computed(() => /^[A-Za-z\s]{2,}$/.test(name.value.trim()))
 const phoneValid = computed(() => /^\d{7,15}$/.test(phone.value.trim()))
 const canCheckout = computed(() => nameValid.value && phoneValid.value && props.cart.length > 0)
@@ -32,10 +19,8 @@ const total = computed(() => props.cart.reduce((s, i) => s + i.price * (i.quanti
 
 function handleCheckout() {
   if (!canCheckout.value) return
-  // notify parent to process/clear the cart
   props.onCheckout(name.value.trim(), phone.value.trim())
-  // show confirmation and clear inputs
-  confirmation.value = `Thank you, ${name.value.trim()}! Your order totaling £${total.value.toFixed(2)} has been submitted.`
+  confirmation.value = `Thank you, ${name.value.trim()}! Order submitted.`
   name.value = ''
   phone.value = ''
 }

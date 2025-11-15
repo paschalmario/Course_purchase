@@ -11,8 +11,7 @@ const props = defineProps({
 const emit = defineEmits(['add-to-cart'])
 
 function addToCart() {
-  // Prepare a payload and emit an event instead of manipulating localStorage / window events.
-  // Parent component should listen for "add-to-cart" and handle cart state/storage.
+  if (!props.item || (props.item.spaces || 0) <= 0) return
   emit('add-to-cart', {
     id: props.item.id,
     subject: props.item.subject,
@@ -46,8 +45,10 @@ function addToCart() {
 
       <!-- Emit Vue event instead of using direct DOM APIs / localStorage -->
       <button
-        class="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors duration-300 add-to-cart"
+        class="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors duration-300 add-to-cart disabled:opacity-50 disabled:cursor-not-allowed"
+        :disabled="!(item.spaces > 0)"
         @click="addToCart"
+        aria-disabled="!(item.spaces > 0)"
       >
         Add to cart <i class="fa-solid fa-cart-plus ml-2"></i>
       </button>
